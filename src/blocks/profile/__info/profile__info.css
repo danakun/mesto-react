@@ -1,0 +1,27 @@
+.profile__info {
+  max-width: 520px;
+  display: grid;
+  grid-template-areas:
+      "name editButton"
+      "job .";
+  grid-template-columns: 1fr min-content;
+  column-gap: 18px;
+  align-items: baseline;
+  justify-self: flex-start;
+  margin-right: auto;
+  padding-left: 30px;
+}
+
+@media screen and (max-width: 1080px) {
+  .profile__info {
+    text-align: center;
+    margin: auto;
+    padding-top: 26px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .profile__info {
+    column-gap: 10px;
+  }
+}
