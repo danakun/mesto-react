@@ -21,7 +21,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
         setCards(cards);
       })
       .catch((error) => console.log(`Ошибка: ${error}`));
-  }, [onEditProfile, onAddPlace, onEditAvatar, onCardClick]);
+  }, []);
 
   return (
     <main className="main">

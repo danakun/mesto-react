@@ -7,10 +7,10 @@
 ### Использованные технологии
 
 * JSX
-* useState, useEffect
+* useState, useEffect hooks
 * API
 * React-Create-App
-* Созданы компоненты header, main, footer, для попапов и катрочек
+* Созданы компоненты header, main, footer, для попапов и карточек
 * Использован функциональный подход
 
 **Сcылки**
