@@ -12,8 +12,8 @@ const isOwn = card.owner._id === currentUser._id;
 
 // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
 const isLiked = card.likes.some(like => like._id === currentUser._id);
-console.log('isMine?' + isOwn)
-console.log('isLiked?' + isLiked)
+//console.log('isMine?' + isOwn)
+//console.log('isLiked?' + isLiked)
 
 // Создаём переменную, которую после зададим в `className` для кнопки лайка
 const cardLikeButtonClassName = ( 
