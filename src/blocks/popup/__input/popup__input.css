@@ -1,0 +1,60 @@
+.popup__input {
+  padding: 0 0 10px;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  font-family: inherit;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  transition: opacity .4s ease;
+}
+
+
+.popup__input::placeholder {
+  opacity: 0.5;
+}
+
+.popup__input:hover::placeholder {
+  opacity: 1;
+}
+
+.popup__input:focus {
+  outline-color: transparent;
+}
+
+
+
+
+
+
+/*
+
+
+.form__item::-webkit-input-placeholder {
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 2.15;
+  color: #222222;
+  opacity: 0.7;
+}
+
+.form__item::-moz-placeholder {
+  font-size: 13px;
+    font-family: inherit;
+    line-height: 2.15;
+    color: #222222;
+    opacity: 0.7;
+}
+
+.form__item::-ms-input-placeholder {
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 2.15;
+  color: #222222;
+  opacity: 0.7;
+}
+
+*/
