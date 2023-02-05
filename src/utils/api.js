@@ -67,6 +67,14 @@ class Api {
       }).then(this.getResponseData);
     }
   
+    changeLikeCardStatus(id, isLiked) {
+      if (isLiked) {
+        
+        return this.addLike(id);
+      }
+      return this.deleteLike(id);
+    }
+
     updateProfilePicture(avatar) {
       return fetch(`${this._baseUrl}/users/me/avatar`, {
         method: "PATCH",

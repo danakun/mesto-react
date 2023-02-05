@@ -1,7 +1,36 @@
-function Card({ card, onCardClick }) {
+import { useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+
+
+function Card({ card, onCardClick, onCardLike, onCardDelete }) {
+  const currentUser = useContext(CurrentUserContext);
+  //const { link, name, owner, likes } = card;
+  // Определяем, являемся ли мы владельцем текущей карточки
+const isOwn = card.owner._id === currentUser._id;
+// Далее в разметке используем переменную для условного рендеринга
+//{isOwn && <button className='photo-grid__delete' onClick={handleDeleteClick} />}
+
+// Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+const isLiked = card.likes.some(like => like._id === currentUser._id);
+console.log('isMine?' + isOwn)
+console.log('isLiked?' + isLiked)
+
+// Создаём переменную, которую после зададим в `className` для кнопки лайка
+const cardLikeButtonClassName = ( 
+  `photo-grid__like ${isLiked && 'photo-grid__like_active'}` 
+); 
+// Функция обработчик клика по карточке
   function handleCardClick() {
     onCardClick(card);
   }
+// Функция обработчик клика по сердечку
+  function handleLikeClick() {
+    onCardLike(card)
+  }
+
+function handleDeleteClick()  {
+  onCardDelete(card)
+};
 
   return (
     <li className="photo-grid__element">
@@ -15,18 +44,20 @@ function Card({ card, onCardClick }) {
         <h2 className="photo-grid__text">{card.name}</h2>
         <div className="counter">
           <button
-            className="photo-grid__like"
+            className={cardLikeButtonClassName} //"photo-grid__like"
             type="button"
             aria-label="Нравится"
+            onClick={handleLikeClick}
           ></button>
-          <span className="photo-grid__like-counter"></span>
+          <span className="photo-grid__like-counter">{card.likes.length}</span>
         </div>
       </div>
-      <button
+      {isOwn && <button 
         className="photo-grid__delete"
+        onClick={handleDeleteClick} 
         type="button"
         aria-label="Удалить фото"
-      ></button>
+      ></button>}
     </li>
   );
 }

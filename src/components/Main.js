@@ -1,27 +1,31 @@
-import { api } from '../utils/api';
+
 import { useEffect, useState } from 'react';
 import Card from './Card';
+import { useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
+
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onCardDelete }) {
+  const { currentUser, cards } = useContext(CurrentUserContext);
   // Переменные состояния информации профиля
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('#');
+  //const [userName, setUserName] = useState('');
+  //const [userDescription, setUserDescription] = useState('');
+ // const [userAvatar, setUserAvatar] = useState('#');
 
   // Переменные состояния массива карточек
-  const [cards, setCards] = useState([]);
+  //const [cards, setCards] = useState([]);
 
   // Функция эффекта для данных профиля и карточки
-  useEffect(() => {
-    Promise.all([api.getUserProfile(), api.getInitialCards()])
-      .then(([userData, cards]) => {
-        setUserName(userData.name);
-        setUserDescription(userData.about);
-        setUserAvatar(userData.avatar);
-        setCards(cards);
-      })
-      .catch((error) => console.log(`Ошибка: ${error}`));
-  }, []);
+  // useEffect(() => {
+  //   Promise.all([api.getUserProfile(), api.getInitialCards()])
+  //     .then(([userData, cards]) => {
+  //       setUserName(userData.name);
+  //       setUserDescription(userData.about);
+  //       setUserAvatar(userData.avatar);
+  //       setCards(cards);
+  //     })
+  //     .catch((error) => console.log(`Ошибка: ${error}`));
+  // }, []);
 
   return (
     <main className="main">
@@ -31,11 +35,11 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
           aria-label="Открыть попап редактирования аватара"
           tabIndex="1"
           onClick={onEditAvatar}
-          style={{ backgroundImage: `url(${userAvatar})` }}
+          style={{ backgroundImage: `url(${currentUser.avatar})` }}
         ></div>
         <div className="profile__info">
-          <h1 className="profile__name">{userName}</h1>
-          <p className="profile__job">{userDescription}</p>
+          <h1 className="profile__name">{currentUser.name}</h1>
+          <p className="profile__job">{currentUser.about}</p>
           <button
             className="profile__edit-button"
             aria-label="Изменить профиль"
@@ -56,6 +60,8 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
             <Card
               card={card}
               onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
               key={card._id}
             />
           ))}

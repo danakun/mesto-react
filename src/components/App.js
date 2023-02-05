@@ -1,11 +1,15 @@
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import { api } from '../utils/api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
+  // Переменная состояния для инфо пользователя
+  const [currentUser, setCurrentUser] = useState({})
   // Переменные состояний для попапов
   const [isAvatarPopupOpened, setIsAvatarPopupOpened] = useState(false);
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] =
@@ -13,8 +17,31 @@ function App() {
   const [isAddPhotoPopupOpened, setIsAddPhotoPopupOpened] = useState(false);
   const [IsConfirmationPopupOpened, setIsConfirmationPopupOpened] =
     useState(false);
-  // Переменная состояния для карточек
+  // Переменная состояния для карточки
   const [selectedCard, setSelectedCard] = useState(null);
+// Переменная состояния для массива карточек
+  const [cards, setCards] = useState([]);
+
+  // Обработчик клика для пользователя
+ function handleUserUpdate({ name, about }) {
+   api.editProfile(name, about)
+   .then((newUser) => {
+   setCurrentUser(newUser)
+   closeAllPopups();
+ })
+ .catch((error) => console.log(`Ошибка: ${error}`));
+}
+
+ // Функция с промисом для данных профиля и карточки
+ useEffect(() => {
+    Promise.all([api.getUserProfile(), api.getInitialCards()])
+      .then(([currentUser, cards]) => {
+        setCurrentUser(currentUser);
+        setCards(cards);
+        console.log(currentUser)
+      })
+      .catch((error) => console.log(`Ошибка: ${error}`));
+  }, []);
 
   // Обработчики открывания попапов по клику
   function handleEditAvatarClick() {
@@ -33,6 +60,28 @@ function App() {
     setSelectedCard(selectedCard);
   }
 
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(like => like._id === currentUser._id);
+    
+    // Отправляем запрос в api для данных о лайке
+    api.changeLikeCardStatus(card._id, !isLiked)
+    .then((newCard) => {
+        setCards((state) => state.map((thisCard) => 
+        thisCard._id === card._id ? newCard : thisCard));
+    })
+    .catch((error) => console.log(`Ошибка: ${error}`));
+
+    console.log(card._id, isLiked)
+} 
+
+function handleCardDelete(card) {
+api.deleteCard(card._id)
+.then(() => {
+  setCards((state) => state.filter((thisCard) => thisCard._id !== card._id)) 
+})
+.catch((error) => console.log(`Ошибка: ${error}`))
+}
   // Обработчик закрытия попапов
   function closeAllPopups() {
     setSelectedCard(null);
@@ -50,6 +99,7 @@ function App() {
   };
 
   return (
+    <CurrentUserContext.Provider value={{ currentUser, cards }}>
     <div className="page">
       <Header />
       <Main
@@ -57,11 +107,14 @@ function App() {
         onEditAvatar={handleEditAvatarClick}
         onAddPlace={handleAddPlaceClick}
         onCardClick={handleCardClick}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete}
       />
       <Footer />
       <PopupWithForm
         name="change-avatar"
         title="Обновить аватар"
+        onUpdateUser={handleUserUpdate}
         isOpen={isAvatarPopupOpened}
         onClose={closeAllPopups}
         onOverlayClick={handleOverlayClick}
@@ -175,6 +228,7 @@ function App() {
         onOverlayClick={handleOverlayClick}
       />
     </div>
+    </CurrentUserContext.Provider>
   );
 }
 
