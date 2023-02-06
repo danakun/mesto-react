@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
 
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const currentUser = useContext(CurrentUserContext);
-  //const { link, name, owner, likes } = card;
+  
   // Определяем, являемся ли мы владельцем текущей карточки
 const isOwn = card.owner._id === currentUser._id;
 // Далее в разметке используем переменную для условного рендеринга
@@ -12,8 +12,8 @@ const isOwn = card.owner._id === currentUser._id;
 
 // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
 const isLiked = card.likes.some(like => like._id === currentUser._id);
-//console.log('isMine?' + isOwn)
-//console.log('isLiked?' + isLiked)
+//console.log('like._id ' + isOwn)
+//console.log('currentUser._id ' + isLiked)
 
 // Создаём переменную, которую после зададим в `className` для кнопки лайка
 const cardLikeButtonClassName = ( 

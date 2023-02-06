@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { api } from '../utils/api';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
 function App() {
   // Переменная состояния для инфо пользователя
@@ -21,16 +21,6 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
 // Переменная состояния для массива карточек
   const [cards, setCards] = useState([]);
-
-  // Обработчик клика для пользователя
- function handleUserUpdate({ name, about }) {
-   api.editProfile(name, about)
-   .then((newUser) => {
-   setCurrentUser(newUser)
-   closeAllPopups();
- })
- .catch((error) => console.log(`Ошибка: ${error}`));
-}
 
  // Функция с промисом для данных профиля и карточки
  useEffect(() => {
@@ -60,15 +50,28 @@ function App() {
     setSelectedCard(selectedCard);
   }
 
+  // Обработчик клика для пользователя
+ function handleUserUpdate({ name, about }) {
+  api.editProfile(name, about)
+  .then((newUser) => {
+  setCurrentUser(newUser)
+  closeAllPopups();
+})
+.catch((error) => console.log(`Ошибка: ${error}`));
+}
+
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(like => like._id === currentUser._id);
+    console.log('myId ' + currentUser._id)
+    console.log('cardlikes ' + card.likes)
+    
     
     // Отправляем запрос в api для данных о лайке
     api.changeLikeCardStatus(card._id, !isLiked)
     .then((newCard) => {
-        setCards((state) => state.map((thisCard) => 
-        thisCard._id === card._id ? newCard : thisCard));
+        setCards((state) => state.map((c) => 
+        c._id === card._id ? newCard : c));
     })
     .catch((error) => console.log(`Ошибка: ${error}`));
 
