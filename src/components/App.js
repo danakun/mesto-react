@@ -102,7 +102,7 @@ api.deleteCard(card._id)
   };
 
   return (
-    <CurrentUserContext.Provider value={{ currentUser, cards }}>
+    <CurrentUserContext.Provider value={{ currentUser}}>
     <div className="page">
       <Header />
       <Main
@@ -112,6 +112,7 @@ api.deleteCard(card._id)
         onCardClick={handleCardClick}
         onCardLike={handleCardLike}
         onCardDelete={handleCardDelete}
+        cards={cards}
       />
       <Footer />
       <PopupWithForm
