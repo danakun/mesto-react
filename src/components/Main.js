@@ -9,10 +9,10 @@ function Main({
   onCardClick,
   onCardLike,
   onCardDelete,
-  cards
+  cards,
 }) {
-  const { currentUser } = useContext(CurrentUserContext);
-  
+  const { name, about, avatar } = useContext(CurrentUserContext);
+
   return (
     <main className="main">
       <section className="profile container">
@@ -21,11 +21,11 @@ function Main({
           aria-label="Открыть попап редактирования аватара"
           tabIndex="1"
           onClick={onEditAvatar}
-          style={{ backgroundImage: `url(${currentUser.avatar})` }}
+          style={{ backgroundImage: `url(${avatar})` }}
         ></div>
         <div className="profile__info">
-          <h1 className="profile__name">{currentUser.name}</h1>
-          <p className="profile__job">{currentUser.about}</p>
+          <h1 className="profile__name">{name}</h1>
+          <p className="profile__job">{about}</p>
           <button
             className="profile__edit-button"
             aria-label="Изменить профиль"
@@ -41,7 +41,8 @@ function Main({
         ></button>
       </section>
       <section className="elements container">
-        <ul className="photo-grid">{cards.map((card) => {
+        <ul className="photo-grid">
+          {cards.map((card) => {
             return (
               <Card
                 key={card._id}
@@ -50,49 +51,12 @@ function Main({
                 onCardLike={onCardLike}
                 onCardDelete={onCardDelete}
               />
-            )
-          })}</ul>
+            );
+          })}
+        </ul>
       </section>
     </main>
   );
 }
 
 export default Main;
-
-
-
-
-
-// const cardElements = cards.map((card) => {
-  //   return (
-  //     <li key={card._id}>
-  //       <Card
-  //         card={card}
-  //         onCardClick={onCardClick}
-  //         onCardLike={onCardLike}
-  //         onCardDelete={onCardDelete}
-  //
-  //       />
-  //     </li>
-  //   );
-  // });
-
-  // Переменные состояния информации профиля
-  //const [userName, setUserName] = useState('');
-  //const [userDescription, setUserDescription] = useState('');
-  // const [userAvatar, setUserAvatar] = useState('#');
-
-  // Переменные состояния массива карточек
- //const [cards, setCards] = useState([]);
-
-  // Функция эффекта для данных профиля и карточки
-  // useEffect(() => {
-  //   Promise.all([api.getUserProfile(), api.getInitialCards()])
-  //     .then(([userData, cards]) => {
-  //       setUserName(userData.name);
-  //       setUserDescription(userData.about);
-  //       setUserAvatar(userData.avatar);
-  //       setCards(cards);
-  //     })
-  //     .catch((error) => console.log(`Ошибка: ${error}`));
-  // }, []);

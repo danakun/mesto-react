@@ -4,6 +4,7 @@ function PopupWithForm({
   title,
   children,
   onClose,
+  onSubmit,
   onOverlayClick,
   buttonText,
 }) {
@@ -19,6 +20,7 @@ function PopupWithForm({
         <form
           className={`popup__form ${name}-form`}
           name={name}
+          onSubmit={onSubmit}
           noValidate
         >
           {children}

@@ -6,6 +6,9 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { api } from '../utils/api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
+import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
   // Переменная состояния для инфо пользователя
@@ -28,8 +31,6 @@ function App() {
       .then(([currentUser, cards]) => {
         setCurrentUser(currentUser);
         setCards(cards);
-        // console.log(currentUser)
-        //console.log(cards)
       })
       .catch((error) => console.log(`Ошибка: ${error}`));
   }, []);
@@ -51,10 +52,6 @@ function App() {
     setSelectedCard(selectedCard);
   }
 
-  function handleUserUpdate(currentUser) {
-    setCurrentUser(currentUser);
-  }
-
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -68,12 +65,6 @@ function App() {
         );
       })
       .catch((error) => console.log(`Ошибка: ${error}`));
-    // console.log('myId ' + currentUser._id)
-    //console.log('cardlikes ' + card.likes)
-    // console.log('card ' + card)
-    // console.log(cards)
-    // console.log({ card });
-    // console.log(card._id, isLiked);
   }
 
   function handleCardDelete(card) {
@@ -102,8 +93,43 @@ function App() {
     }
   };
 
+  function handleUpdateUser({ name, about }) {
+    // Внутри этого обработчика вызовите api.setUserInfo.
+    // После завершения запроса обновите стейт currentUser из полученных данных
+    //  и закройте все модальные окна.
+    api
+      .editProfile(name, about)
+      .then((newData) => {
+        setCurrentUser(newData);
+        closeAllPopups();
+      })
+      .catch((error) => console.log(error));
+  }
+
+  // Обработчик смены аватара
+  function handleUpdateAvatar(avatar) {
+    api
+      .updateProfilePicture(avatar)
+      .then((currentUser) => {
+        setCurrentUser(currentUser);
+        closeAllPopups();
+      })
+      .catch((error) => console.log(`Ошибка: ${error}`));
+  }
+
+  // Обработчик добавления новой карточки
+  function handleAddPlaceSubmit(name, link) {
+    api
+      .addCard(name, link)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((error) => console.log(`Ошибка: ${error}`));
+  }
+
   return (
-    <CurrentUserContext.Provider value={{ currentUser }}>
+    <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
         <Main
@@ -116,110 +142,27 @@ function App() {
           cards={cards}
         />
         <Footer />
-        <PopupWithForm
-          name="change-avatar"
-          title="Обновить аватар"
-          onUpdateUser={handleUserUpdate}
+        <EditAvatarPopup
           isOpen={isAvatarPopupOpened}
           onClose={closeAllPopups}
           onOverlayClick={handleOverlayClick}
-          buttonText="Сохранить"
-        >
-          <label className="popup__input-label">
-            <input
-              name="link"
-              id="avatar-link"
-              type="url"
-              className="popup__input popup__input_type_photo"
-              placeholder="Ссылка на аватар"
-              required=""
-            />
-            <span
-              className="popup__error avatar-link-error"
-              id="avatar-link-error"
-            ></span>
-          </label>
-        </PopupWithForm>
-        <PopupWithForm
-          name="profile"
-          title="Редактировать профиль"
+          onUpdateAvatar={handleUpdateAvatar}
+        />
+
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpened}
           onClose={closeAllPopups}
           onOverlayClick={handleOverlayClick}
-          buttonText="Сохранить"
-        >
-          <label className="popup__input-label">
-            <input
-              name="name"
-              id="name"
-              type="text"
-              className="popup__input popup__input_type_name"
-              placeholder="Ваше имя"
-              minLength="2"
-              maxLength="40"
-              required=""
-            />
-            <span
-              className="popup__error name-error"
-              id="name-error"
-            ></span>
-          </label>
-          <label className="popup__input-label">
-            <input
-              name="job"
-              id="job"
-              type="text"
-              className="popup__input popup__input_type_job"
-              placeholder="Ваша профессия"
-              minLength="2"
-              maxLength="200"
-              required=""
-            />
-            <span
-              className="popup__error job-error"
-              id="job-error"
-            ></span>
-          </label>
-        </PopupWithForm>
-        <PopupWithForm
-          name="add-photo"
-          title="Новое место"
+          onUpdateUser={handleUpdateUser}
+        />
+
+        <AddPlacePopup
           isOpen={isAddPhotoPopupOpened}
           onClose={closeAllPopups}
           onOverlayClick={handleOverlayClick}
-          buttonText="Создать"
-        >
-          <label className="popup__input-label">
-            <input
-              name="name"
-              id="title"
-              type="text"
-              className="popup__input popup__input_type_title"
-              placeholder="Название"
-              minLength="2"
-              maxLength="30"
-              required=""
-            />
-            <span
-              className="popup__error title-error"
-              id="title-error"
-            ></span>
-          </label>
-          <label className="popup__input-label">
-            <input
-              name="link"
-              id="photo-link"
-              type="url"
-              className="popup__input popup__input_type_photo"
-              placeholder="Ссылка на картинку"
-              required=""
-            />
-            <span
-              className="popup__error photo-link-error"
-              id="photo-link-error"
-            ></span>
-          </label>
-        </PopupWithForm>
+          onAddPlace={handleAddPlaceSubmit}
+        />
+
         <PopupWithForm
           name="confirm-del"
           title="Вы уверены?"
@@ -238,13 +181,3 @@ function App() {
 }
 
 export default App;
-
-//   // Обработчик клика для пользователя
-//  function handleUserUpdate({ name, about }) {
-//   api.editProfile(name, about)
-//   .then((newUser) => {
-//   setCurrentUser(newUser)
-//   closeAllPopups();
-// })
-// .catch((error) => console.log(`Ошибка: ${error}`));
-// }
