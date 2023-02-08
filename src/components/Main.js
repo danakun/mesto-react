@@ -12,40 +12,7 @@ function Main({
   cards
 }) {
   const { currentUser } = useContext(CurrentUserContext);
-  // const cardElements = cards.map((card) => {
-  //   return (
-  //     <li key={card._id}>
-  //       <Card
-  //         card={card}
-  //         onCardClick={onCardClick}
-  //         onCardLike={onCardLike}
-  //         onCardDelete={onCardDelete}
-  //
-  //       />
-  //     </li>
-  //   );
-  // });
-
-  // Переменные состояния информации профиля
-  //const [userName, setUserName] = useState('');
-  //const [userDescription, setUserDescription] = useState('');
-  // const [userAvatar, setUserAvatar] = useState('#');
-
-  // Переменные состояния массива карточек
- //const [cards, setCards] = useState([]);
-
-  // Функция эффекта для данных профиля и карточки
-  // useEffect(() => {
-  //   Promise.all([api.getUserProfile(), api.getInitialCards()])
-  //     .then(([userData, cards]) => {
-  //       setUserName(userData.name);
-  //       setUserDescription(userData.about);
-  //       setUserAvatar(userData.avatar);
-  //       setCards(cards);
-  //     })
-  //     .catch((error) => console.log(`Ошибка: ${error}`));
-  // }, []);
-
+  
   return (
     <main className="main">
       <section className="profile container">
@@ -91,3 +58,41 @@ function Main({
 }
 
 export default Main;
+
+
+
+
+
+// const cardElements = cards.map((card) => {
+  //   return (
+  //     <li key={card._id}>
+  //       <Card
+  //         card={card}
+  //         onCardClick={onCardClick}
+  //         onCardLike={onCardLike}
+  //         onCardDelete={onCardDelete}
+  //
+  //       />
+  //     </li>
+  //   );
+  // });
+
+  // Переменные состояния информации профиля
+  //const [userName, setUserName] = useState('');
+  //const [userDescription, setUserDescription] = useState('');
+  // const [userAvatar, setUserAvatar] = useState('#');
+
+  // Переменные состояния массива карточек
+ //const [cards, setCards] = useState([]);
+
+  // Функция эффекта для данных профиля и карточки
+  // useEffect(() => {
+  //   Promise.all([api.getUserProfile(), api.getInitialCards()])
+  //     .then(([userData, cards]) => {
+  //       setUserName(userData.name);
+  //       setUserDescription(userData.about);
+  //       setUserAvatar(userData.avatar);
+  //       setCards(cards);
+  //     })
+  //     .catch((error) => console.log(`Ошибка: ${error}`));
+  // }, []);
